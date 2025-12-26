@@ -16,7 +16,8 @@ Bu yöntem en performanslı ve yönetimi en kolay olanıdır.
     *   Vercel'e GitHub ile giriş yapın.
     *   Repository'nizi seçip "Import" deyin.
     *   **Environment Variables** kısmına şunları ekleyin:
-        *   `DATABASE_URL`: `mysql://KULLANICI_ADI:SIFRE@SUNUCU_IP_ADRESI:3306/VERITABANI_ADI`
+        *   `DATABASE_URL`: `mysql://getkontento_legalmaticdb:.88n-aypn%26NL@160.153.246.164:3306/getkontento_legalmaticDB`
+        *   *(Not: Şifrenizdeki `&` karakteri `%26` olarak kodlanmıştır ve port `2083` değil standart MySQL portu olan `3306` olarak ayarlanmıştır.)*
         *   `NEXTAUTH_SECRET`: Rastgele uzun bir şifre (örn: `openssl rand -base64 32`).
         *   `NEXTAUTH_URL`: `https://sizin-vercel-adresiniz.vercel.app`
 4.  **Deploy:** "Deploy" butonuna basın.
