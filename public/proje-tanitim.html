@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalMatic 2026 - Proje Tanıtımı</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #ec7b1f;
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 1.3em;
+            color: #666;
+            font-weight: 300;
+        }
+        
+        .section {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #ec7b1f;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #ec7b1f;
+            padding-bottom: 10px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .feature-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .tech-badge {
+            background: #ec7b1f;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        ul {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #ec7b1f;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #ec7b1f 0%, #d65d0a 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 40px;
+            border-radius: 20px;
+            margin-top: 30px;
+        }
+        
+        .cta-section h2 {
+            color: white;
+            border: none;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: white;
+            color: #ec7b1f;
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 LegalMatic 2026</h1>
+            <p class="tagline">Yapay Zeka Destekli Akıllı Sözleşme Platformu</p>
+        </header>
+
+        <div class="section">
+            <h2>📋 Proje Hakkında</h2>
+            <p style="font-size: 1.1em; line-height: 1.8;">
+                LegalMatic 2026, kullanıcıların hukuki sözleşmeleri kolayca oluşturmasını, özelleştirmesini ve yönetmesini sağlayan modern bir SaaS platformudur. 
+                Next.js 15 ve Prisma ORM ile geliştirilmiş, güvenli ve ölçeklenebilir bir çözümdür.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>✨ Temel Özellikler</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-title">Akıllı Form Sihirbazı</div>
+                    <p>Adım adım rehberlik ile kullanıcı dostu sözleşme oluşturma deneyimi. Gerçek zamanlı önizleme ve otomatik kaydetme.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <div class="feature-title">Güvenli Kimlik Doğrulama</div>
+                    <p>NextAuth.js ile JWT tabanlı oturum yönetimi. Rol bazlı erişim kontrolü (Admin/User).</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">Admin CRM Paneli</div>
+                    <p>Müşteri yönetimi, sipariş takibi ve detaylı analitik raporlama özellikleri.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💳</div>
+                    <div class="feature-title">Ödeme Entegrasyonu</div>
+                    <p>Güvenli ödeme işlemleri ve otomatik fatura oluşturma sistemi.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📄</div>
+                    <div class="feature-title">Belge Yönetimi</div>
+                    <p>DOCX formatında indirme, taslak kaydetme ve sözleşme versiyonlama.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <div class="feature-title">Akıllı Arama</div>
+                    <p>Gerçek zamanlı arama önerileri ve popüler sözleşme kategorileri.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Teknoloji Yığını</h2>
+            <div class="tech-stack">
+                <span class="tech-badge">Next.js 15 (App Router)</span>
+                <span class="tech-badge">React 19</span>
+                <span class="tech-badge">TypeScript</span>
+                <span class="tech-badge">Prisma ORM</span>
+                <span class="tech-badge">MySQL</span>
+                <span class="tech-badge">NextAuth.js</span>
+                <span class="tech-badge">Tailwind CSS 4</span>
+                <span class="tech-badge">Shadcn/ui</span>
+                <span class="tech-badge">Framer Motion</span>
+                <span class="tech-badge">TinyMCE</span>
+                <span class="tech-badge">Zod</span>
+                <span class="tech-badge">Bcrypt.js</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎨 Kullanıcı Deneyimi Özellikleri</h2>
+            <ul>
+                <li>Modern ve responsive tasarım (Mobile-first yaklaşım)</li>
+                <li>Dark mode desteği</li>
+                <li>Animasyonlu geçişler ve mikro-etkileşimler</li>
+                <li>Gerçek zamanlı form validasyonu</li>
+                <li>Sürükle-bırak dosya yükleme</li>
+                <li>İlerleme göstergeleri ve adım takibi</li>
+                <li>Toast bildirimleri ve kullanıcı geri bildirimleri</li>
+                <li>Klavye kısayolları desteği</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🔐 Güvenlik Özellikleri</h2>
+            <ul>
+                <li>Şifreli veri saklama (Bcrypt ile hash'leme)</li>
+                <li>CSRF koruması</li>
+                <li>SQL injection koruması (Prisma ORM)</li>
+                <li>XSS koruması</li>
+                <li>Rate limiting ve DDoS koruması</li>
+                <li>Güvenli session yönetimi</li>
+                <li>Environment variables ile hassas veri yönetimi</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>📈 Proje İstatistikleri</h2>
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Sözleşme Şablonu</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Bileşen</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">TypeScript</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">10+</div>
+                    <div class="stat-label">API Route</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Deployment</h2>
+            <p style="font-size: 1.1em; margin-bottom: 20px;">
+                Proje Vercel platformunda deploy edilmek üzere optimize edilmiştir:
+            </p>
+            <ul>
+                <li>Otomatik CI/CD pipeline (GitHub entegrasyonu)</li>
+                <li>Edge Functions desteği</li>
+                <li>Otomatik HTTPS sertifikası</li>
+                <li>Global CDN dağıtımı</li>
+                <li>Sıfır downtime deployment</li>
+                <li>Detaylı analytics ve monitoring</li>
+            </ul>
+        </div>
+
+        <div class="cta-section">
+            <h2>🎯 Proje Hedefleri</h2>
+            <p style="font-size: 1.2em; margin-bottom: 20px;">
+                Hukuki süreçleri dijitalleştirerek, kullanıcıların zaman ve maliyet tasarrufu yapmasını sağlamak. 
+                Karmaşık yasal belgeleri herkes için erişilebilir ve anlaşılır hale getirmek.
+            </p>
+            <a href="https://github.com/seyidturgut/legalmatic2026" class="btn" target="_blank">
+                GitHub'da İncele →
+            </a>
+        </div>
+    </div>
+</body>
+</html>

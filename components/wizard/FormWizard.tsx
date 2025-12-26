@@ -695,14 +695,14 @@ export default function FormWizard({ schema, productTitle, productPrice, product
                             <span>256-bit uçtan uca şifreleme</span>
                         </div>
                     </div>
-                    <DialogFooter className="flex-col gap-2 sm:gap-0">
-                        <Button variant="outline" onClick={() => router.push('/login?callbackUrl=' + encodeURIComponent(window.location.href))} className="w-full">
+                    <div className="grid grid-cols-2 gap-3">
+                        <Button variant="outline" onClick={() => router.push('/login?callbackUrl=' + encodeURIComponent(window.location.href))}>
                             Giriş Yap
                         </Button>
-                        <Button onClick={() => router.push('/register?callbackUrl=' + encodeURIComponent(window.location.href))} className="w-full bg-[#ec7b1f] hover:bg-[#d65d0a] text-white">
+                        <Button onClick={() => router.push('/register?callbackUrl=' + encodeURIComponent(window.location.href))} className="bg-[#ec7b1f] hover:bg-[#d65d0a] text-white">
                             Hemen Üye Ol
                         </Button>
-                    </DialogFooter>
+                    </div>
                 </DialogContent>
             </Dialog>
         </div>
