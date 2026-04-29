@@ -1,42 +1,26 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import './globals.css'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import { Providers } from './providers'
+import 'grapesjs/dist/css/grapes.min.css'
 
-import { SessionProvider } from "@/components/providers/SessionProvider";
-import { getServerSession } from "next-auth"; // Added this import to make getServerSession available
-
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "Legalmatic",
-  description: "Hukuki İşlemleriniz İçin Akıllı Çözümler",
-  icons: {
-    icon: [
-      { url: '/cropped-favicon.jpg?v=3' },
-      { url: '/cropped-favicon.jpg?v=3', type: 'image/jpeg' },
-    ],
-    shortcut: ['/cropped-favicon.jpg?v=3'],
-    apple: [
-      { url: '/cropped-favicon.jpg?v=3' },
-    ],
-  },
-};
+  title: 'Legalmatic - Sözleşme Yönetim Sistemi',
+  description: 'Profesyonel sözleşme şablonları ve yönetim sistemi',
+}
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const session = await getServerSession();
-
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="tr">
       <body className={inter.className}>
-        <SessionProvider session={session}>
-          {children}
-        </SessionProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
-  );
+  )
 }

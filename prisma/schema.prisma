@@ -45,11 +45,12 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts      Account[]
-  sessions      Session[]
-  orders        Order[]
-  drafts        ContractDraft[]
-  contracts     UserContract[]
+  accounts       Account[]
+  sessions       Session[]
+  orders         Order[]
+  drafts         ContractDraft[]
+  contracts      UserContract[]
+  adminContracts Contract[]      @relation("ContractCreator")
 }
 
 model VerificationToken {
@@ -67,17 +68,17 @@ model Product {
   price          Float
   slug           String   @unique
   category       String
-  details        Json?    // Stores rich content: intro, usage, scope, faq, etc.
+  details        Json? // Stores rich content: intro, usage, scope, faq, etc.
   templateSchema String   @db.Text
   htmlContent    String?  @db.Text
   image          String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  
-  orders         Order[]
-  drafts         ContractDraft[]
-  contracts      UserContract[]
-  legislations   Legislation[] @relation("ProductLegislations")
+
+  orders       Order[]
+  drafts       ContractDraft[]
+  contracts    UserContract[]
+  legislations Legislation[]   @relation("ProductLegislations")
 }
 
 model Order {
@@ -108,30 +109,51 @@ model ContractDraft {
   @@unique([userId, productId]) // One draft per product per user
 }
 
-
 model UserContract {
-  id          String   @id @default(cuid())
-  userId      String
-  productId   String
-  answers     String   @db.Text // Final snapshot of answers
-  createdAt   DateTime @default(now())
-  status      String   @default("COMPLETED")
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  answers   String   @db.Text // Final snapshot of answers
+  createdAt DateTime @default(now())
+  status    String   @default("COMPLETED")
 
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Legislation {
+  id          String    @id @default(cuid())
+  title       String
+  type        String    @default("Kanun") // Kanun, Yönetmelik, Tebliğ, KHK
+  referenceNo String?
+  slug        String    @unique
+  publishDate DateTime?
+  summary     String?   @db.Text
+  content     String?   @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  products Product[] @relation("ProductLegislations")
+}
+
+model Contract {
   id          String   @id @default(cuid())
   title       String
-  type        String   @default("Kanun") // Kanun, Yönetmelik, Tebliğ, KHK
-  referenceNo String?
   slug        String   @unique
-  publishDate DateTime?
-  summary     String?  @db.Text
-  content     String?  @db.Text
+  category    String
+  description String?  @db.Text
+  content     String   @db.Text
+  variables   Json?
+  isActive    Boolean  @default(true)
+  viewCount   Int      @default(0)
+  usageCount  Int      @default(0)
+  createdBy   String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  products    Product[] @relation("ProductLegislations")
+  creator User @relation("ContractCreator", fields: [createdBy], references: [id])
+
+  @@index([category])
+  @@index([isActive])
+  @@index([createdBy])
 }

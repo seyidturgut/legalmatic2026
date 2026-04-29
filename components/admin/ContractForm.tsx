@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Save, Trash, Upload, FileText, Wand2 } from "lucide-react";
+import { Loader2, Save, Trash, Upload, FileText, Wand2, Plus } from "lucide-react";
 import RichTextEditor from "./RichTextEditor";
 import * as mammoth from "mammoth";
 import { CATEGORIES } from "@/lib/constants";
@@ -339,21 +339,117 @@ export default function ContractForm({ initialData, isNew = false }: ContractFor
                             </CardContent>
                         </div>
                         <div className="md:col-span-1 bg-slate-50 dark:bg-slate-900/50 p-4 max-h-[600px] overflow-y-auto">
-                            <h3 className="font-semibold mb-2 text-sm text-slate-700">Değişken Ekle</h3>
-                            <p className="text-xs text-slate-500 mb-4">Editöre eklemek için değişkene tıklayın</p>
+                            <div className="flex items-center justify-between mb-3">
+                                <h3 className="font-semibold text-sm text-slate-700">Değişken Ekle</h3>
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => {
+                                        const newVar = prompt("Yeni değişken ID'si (camelCase):");
+                                        if (!newVar) return;
+
+                                        const label = prompt("Değişken etiketi:");
+                                        if (!label) return;
+
+                                        try {
+                                            const schema = JSON.parse(formData.templateSchema);
+                                            if (!Array.isArray(schema)) {
+                                                alert("Şema geçerli bir dizi değil");
+                                                return;
+                                            }
+
+                                            // Check if ID already exists
+                                            if (schema.some((q: any) => q.id === newVar)) {
+                                                alert("Bu ID zaten mevcut!");
+                                                return;
+                                            }
+
+                                            schema.push({
+                                                id: newVar,
+                                                type: "text",
+                                                label: label,
+                                                required: true,
+                                                placeholder: `Örn: ${label}`
+                                            });
+
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                templateSchema: JSON.stringify(schema, null, 2)
+                                            }));
+                                        } catch (e) {
+                                            alert("Şema parse edilemedi");
+                                        }
+                                    }}
+                                    className="h-7 text-xs"
+                                >
+                                    <Plus className="w-3 h-3 mr-1" />
+                                    Yeni
+                                </Button>
+                            </div>
+                            <p className="text-xs text-slate-500 mb-4">
+                                Editöre eklemek için değişkene tıklayın
+                            </p>
                             <div className="space-y-2">
-                                {schemaVariables.length === 0 && <p className="text-xs text-slate-400 italic">Şemada tanımlı değişken yok.</p>}
+                                {schemaVariables.length === 0 && (
+                                    <div className="text-center py-8">
+                                        <FileText className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                                        <p className="text-xs text-slate-400 italic">
+                                            Henüz değişken yok
+                                        </p>
+                                        <p className="text-xs text-slate-400 mt-1">
+                                            "Yeni" butonuna tıklayarak ekleyin
+                                        </p>
+                                    </div>
+                                )}
                                 {schemaVariables.map((v) => (
                                     <div
                                         key={v.id}
-                                        onClick={() => insertVariable(v.id)}
-                                        className="flex items-center gap-2 p-2 bg-white dark:bg-slate-800 border rounded cursor-pointer hover:border-blue-500 hover:shadow-sm transition-all text-sm group"
+                                        className="group relative flex items-center gap-2 p-2 bg-white dark:bg-slate-800 border rounded hover:border-blue-500 hover:shadow-sm transition-all"
                                     >
-                                        <span className="font-mono text-blue-600 dark:text-blue-400 font-bold bg-blue-50 px-1 rounded">{`{{${v.id}}}`}</span>
-                                        <span className="truncate text-slate-600 dark:text-slate-300 text-xs">{v.label}</span>
+                                        <div
+                                            onClick={() => insertVariable(v.id)}
+                                            className="flex-1 cursor-pointer"
+                                        >
+                                            <div className="font-mono text-blue-600 dark:text-blue-400 font-bold text-xs bg-blue-50 px-1.5 py-0.5 rounded inline-block mb-1">
+                                                {`{{${v.id}}}`}
+                                            </div>
+                                            <div className="text-slate-600 dark:text-slate-300 text-xs truncate">
+                                                {v.label}
+                                            </div>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                if (!confirm(`"${v.label}" değişkenini silmek istediğinize emin misiniz?`)) return;
+
+                                                try {
+                                                    const schema = JSON.parse(formData.templateSchema);
+                                                    const filtered = schema.filter((q: any) => q.id !== v.id);
+                                                    setFormData(prev => ({
+                                                        ...prev,
+                                                        templateSchema: JSON.stringify(filtered, null, 2)
+                                                    }));
+                                                } catch (e) {
+                                                    alert("Şema parse edilemedi");
+                                                }
+                                            }}
+                                            className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-50 rounded"
+                                        >
+                                            <Trash className="w-3 h-3 text-red-500" />
+                                        </button>
                                     </div>
                                 ))}
                             </div>
+
+                            {schemaVariables.length > 0 && (
+                                <div className="mt-4 pt-4 border-t">
+                                    <p className="text-xs text-slate-500 mb-2">
+                                        <strong>İpucu:</strong> Değişkenleri düzenlemek için "Form Şeması" sekmesine gidin
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     </Card>
                 </TabsContent>
