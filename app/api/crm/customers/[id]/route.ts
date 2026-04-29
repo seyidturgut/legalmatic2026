@@ -10,7 +10,7 @@ import {
 // GET /api/crm/customers/[id] - Get single customer
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -19,8 +19,10 @@ export async function GET(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
+        const { id } = await params;
+
         const customer = await prisma.customer.findUnique({
-            where: { id: params.id },
+            where: { id },
             include: {
                 leads: {
                     orderBy: { createdAt: 'desc' },
@@ -68,7 +70,7 @@ export async function GET(
 // PATCH /api/crm/customers/[id] - Update customer
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -77,6 +79,7 @@ export async function PATCH(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
+        const { id } = await params;
         const body = await request.json();
         const {
             firstName,
@@ -97,7 +100,7 @@ export async function PATCH(
 
         // Check if customer exists
         const existingCustomer = await prisma.customer.findUnique({
-            where: { id: params.id },
+            where: { id },
         });
 
         if (!existingCustomer) {
@@ -123,7 +126,7 @@ export async function PATCH(
 
         // Update customer
         const customer = await prisma.customer.update({
-            where: { id: params.id },
+            where: { id },
             data: {
                 firstName,
                 lastName,
@@ -162,7 +165,7 @@ export async function PATCH(
 // DELETE /api/crm/customers/[id] - Delete customer
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -171,8 +174,10 @@ export async function DELETE(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
+        const { id } = await params;
+
         const customer = await prisma.customer.findUnique({
-            where: { id: params.id },
+            where: { id },
         });
 
         if (!customer) {
@@ -191,7 +196,7 @@ export async function DELETE(
 
         // Delete customer (cascade will handle related records)
         await prisma.customer.delete({
-            where: { id: params.id },
+            where: { id },
         });
 
         return NextResponse.json({ success: true });

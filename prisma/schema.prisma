@@ -51,6 +51,14 @@ model User {
   drafts         ContractDraft[]
   contracts      UserContract[]
   adminContracts Contract[]      @relation("ContractCreator")
+
+  customers      Customer[]      @relation("CustomerCreator")
+  assignedLeads  Lead[]          @relation("LeadAssignee")
+  assignedTasks  Task[]          @relation("TaskAssignee")
+  notes          Note[]          @relation("NoteAuthor")
+  emailCampaigns EmailCampaign[] @relation("EmailCampaignCreator")
+  emailTemplates EmailTemplate[] @relation("EmailTemplateCreator")
+  emailLists     EmailList[]     @relation("EmailListCreator")
 }
 
 model VerificationToken {
@@ -156,4 +164,195 @@ model Contract {
   @@index([category])
   @@index([isActive])
   @@index([createdBy])
+}
+
+model Customer {
+  id             String   @id @default(cuid())
+  firstName      String
+  lastName       String
+  email          String   @unique
+  phone          String?
+  company        String?
+  position       String?
+  address        String?  @db.Text
+  city           String?
+  country        String?  @default("Türkiye")
+  segment        String?
+  source         String?
+  brevoContactId Int?
+  tags           String?  @db.Text
+  customFields   String?  @db.Text
+  status         String   @default("ACTIVE")
+  createdById    String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  createdBy  User              @relation("CustomerCreator", fields: [createdById], references: [id])
+  leads      Lead[]
+  tasks      Task[]
+  notes      Note[]
+  emailLists EmailListMember[]
+}
+
+model Lead {
+  id                String    @id @default(cuid())
+  customerId        String
+  title             String
+  description       String?   @db.Text
+  value             Float?
+  status            String    @default("NEW")
+  priority          String    @default("MEDIUM")
+  source            String?
+  assignedTo        String?
+  expectedCloseDate DateTime?
+  closedAt          DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  customer     Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  assignedUser User?    @relation("LeadAssignee", fields: [assignedTo], references: [id])
+  tasks        Task[]
+  notes        Note[]
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String?   @db.Text
+  type        String    @default("GENERAL")
+  status      String    @default("TODO")
+  priority    String    @default("MEDIUM")
+  dueDate     DateTime?
+  completedAt DateTime?
+  customerId  String?
+  leadId      String?
+  assignedTo  String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  customer     Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  lead         Lead?     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  assignedUser User      @relation("TaskAssignee", fields: [assignedTo], references: [id])
+}
+
+model Note {
+  id         String   @id @default(cuid())
+  content    String   @db.Text
+  type       String   @default("NOTE")
+  customerId String?
+  leadId     String?
+  createdBy  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  customer Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  lead     Lead?     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  author   User      @relation("NoteAuthor", fields: [createdBy], references: [id])
+}
+
+model EmailCampaign {
+  id              String    @id @default(cuid())
+  name            String
+  subject         String
+  previewText     String?
+  templateId      String?
+  htmlContent     String?   @db.Text
+  status          String    @default("DRAFT")
+  scheduledAt     DateTime?
+  sentAt          DateTime?
+  brevoId         Int?
+  recipientCount  Int       @default(0)
+  openRate        Float?
+  clickRate       Float?
+  bounceRate      Float?
+  unsubscribeRate Float?
+  createdBy       String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  template  EmailTemplate?   @relation(fields: [templateId], references: [id])
+  creator   User             @relation("EmailCampaignCreator", fields: [createdBy], references: [id])
+  lists     CampaignList[]
+  analytics EmailAnalytics[]
+}
+
+model EmailTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  subject     String   @default("")
+  description String?  @db.Text
+  previewText String?
+  htmlContent String   @db.Text
+  jsonDesign  String?  @db.LongText
+  thumbnail   String?
+  category    String?
+  isActive    Boolean  @default(true)
+  createdById String   @map("createdBy")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  creator   User            @relation("EmailTemplateCreator", fields: [createdById], references: [id])
+  campaigns EmailCampaign[]
+}
+
+model EmailList {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  brevoListId Int?
+  memberCount Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  creator   User              @relation("EmailListCreator", fields: [createdBy], references: [id])
+  members   EmailListMember[]
+  campaigns CampaignList[]
+}
+
+model EmailListMember {
+  id         String   @id @default(cuid())
+  listId     String
+  customerId String
+  status     String   @default("SUBSCRIBED")
+  addedAt    DateTime @default(now())
+
+  list     EmailList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  customer Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@unique([listId, customerId])
+}
+
+model CampaignList {
+  id         String @id @default(cuid())
+  campaignId String
+  listId     String
+
+  campaign EmailCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  list     EmailList     @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, listId])
+}
+
+model EmailAnalytics {
+  id         String   @id @default(cuid())
+  campaignId String
+  eventType  String
+  email      String
+  timestamp  DateTime
+  metadata   String?  @db.Text
+
+  campaign EmailCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId, eventType])
+}
+
+model Settings {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   @db.Text
+  category  String   @default("general")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

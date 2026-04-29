@@ -87,7 +87,7 @@ export async function updateContactInBrevo(customerId: string) {
         COUNTRY: customer.country || 'Türkiye',
         SEGMENT: customer.segment || '',
         SOURCE: customer.source || '',
-    };
+    } as any;
 
     return await contactsApi.updateContact(customer.email, updateContact);
 }

@@ -242,7 +242,7 @@ async function seedTemplates() {
         await prisma.emailTemplate.create({
             data: {
                 ...template,
-                createdBy: admin.id,
+                createdById: admin.id,
             },
         });
 
